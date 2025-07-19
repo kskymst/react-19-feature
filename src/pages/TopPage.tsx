@@ -43,6 +43,18 @@ const TopPage: React.FC = () => {
               useFormStatus
             </Link>
           </li>
+          <li style={{ marginBottom: '10px' }}>
+            <Link
+              to="/use-optimistic"
+              style={{
+                textDecoration: 'none',
+                color: '#007bff',
+                fontSize: '18px',
+              }}
+            >
+              useOptimistic
+            </Link>
+          </li>
         </ul>
       </div>
     </div>
