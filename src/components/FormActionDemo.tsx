@@ -13,7 +13,10 @@ type FormState = {
 };
 
 // フォーム送信をシミュレートするアクション関数
-async function submitForm(prevState: FormState, formData: FormData): Promise<FormState> {
+async function submitForm(
+  prevState: FormState,
+  formData: FormData
+): Promise<FormState> {
   const name = formData.get('name') as string;
   const email = formData.get('email') as string;
   const message = formData.get('message') as string;
@@ -23,7 +26,7 @@ async function submitForm(prevState: FormState, formData: FormData): Promise<For
     return {
       success: false,
       error: '全ての項目を入力してください',
-      data: null
+      data: null,
     };
   }
 
@@ -31,12 +34,12 @@ async function submitForm(prevState: FormState, formData: FormData): Promise<For
     return {
       success: false,
       error: '有効なメールアドレスを入力してください',
-      data: null
+      data: null,
     };
   }
 
   // 送信をシミュレート（2秒待機）
-  await new Promise(resolve => setTimeout(resolve, 2000));
+  await new Promise((resolve) => setTimeout(resolve, 2000));
 
   // ランダムに成功/失敗を決定
   const isSuccess = Math.random() > 0.3;
@@ -45,23 +48,26 @@ async function submitForm(prevState: FormState, formData: FormData): Promise<For
     return {
       success: true,
       error: null,
-      data: { name, email, message, submittedAt: new Date().toLocaleString() }
+      data: { name, email, message, submittedAt: new Date().toLocaleString() },
     };
   } else {
     return {
       success: false,
       error: 'サーバーエラーが発生しました。しばらく後に再試行してください。',
-      data: null
+      data: null,
     };
   }
 }
 
 const FormActionDemo: React.FC = () => {
-  const [state, formAction, isPending] = useActionState<FormState, FormData>(submitForm, {
-    success: false,
-    error: null,
-    data: null
-  });
+  const [state, formAction, isPending] = useActionState<FormState, FormData>(
+    submitForm,
+    {
+      success: false,
+      error: null,
+      data: null,
+    }
+  );
 
   return (
     <div>
@@ -73,7 +79,10 @@ const FormActionDemo: React.FC = () => {
 
       <form action={formAction} style={{ maxWidth: '500px' }}>
         <div style={{ marginBottom: '15px' }}>
-          <label htmlFor="name" style={{ display: 'block', marginBottom: '5px' }}>
+          <label
+            htmlFor="name"
+            style={{ display: 'block', marginBottom: '5px' }}
+          >
             名前:
           </label>
           <input
@@ -86,14 +95,17 @@ const FormActionDemo: React.FC = () => {
               padding: '8px',
               border: '1px solid #ccc',
               borderRadius: '4px',
-              opacity: isPending ? 0.6 : 1
+              opacity: isPending ? 0.6 : 1,
             }}
             placeholder="山田太郎"
           />
         </div>
 
         <div style={{ marginBottom: '15px' }}>
-          <label htmlFor="email" style={{ display: 'block', marginBottom: '5px' }}>
+          <label
+            htmlFor="email"
+            style={{ display: 'block', marginBottom: '5px' }}
+          >
             メールアドレス:
           </label>
           <input
@@ -106,14 +118,17 @@ const FormActionDemo: React.FC = () => {
               padding: '8px',
               border: '1px solid #ccc',
               borderRadius: '4px',
-              opacity: isPending ? 0.6 : 1
+              opacity: isPending ? 0.6 : 1,
             }}
             placeholder="example@email.com"
           />
         </div>
 
         <div style={{ marginBottom: '15px' }}>
-          <label htmlFor="message" style={{ display: 'block', marginBottom: '5px' }}>
+          <label
+            htmlFor="message"
+            style={{ display: 'block', marginBottom: '5px' }}
+          >
             メッセージ:
           </label>
           <textarea
@@ -127,7 +142,7 @@ const FormActionDemo: React.FC = () => {
               border: '1px solid #ccc',
               borderRadius: '4px',
               resize: 'vertical',
-              opacity: isPending ? 0.6 : 1
+              opacity: isPending ? 0.6 : 1,
             }}
             placeholder="お問い合わせ内容を入力してください"
           />
@@ -143,7 +158,7 @@ const FormActionDemo: React.FC = () => {
             border: 'none',
             borderRadius: '4px',
             cursor: isPending ? 'not-allowed' : 'pointer',
-            fontSize: '16px'
+            fontSize: '16px',
           }}
         >
           {isPending ? '送信中...' : '送信'}
@@ -152,44 +167,58 @@ const FormActionDemo: React.FC = () => {
 
       {/* ローディング状態 */}
       {isPending && (
-        <div style={{ 
-          marginTop: '20px',
-          color: '#007bff',
-          fontStyle: 'italic'
-        }}>
+        <div
+          style={{
+            marginTop: '20px',
+            color: '#007bff',
+            fontStyle: 'italic',
+          }}
+        >
           フォームを送信中です...
         </div>
       )}
 
       {/* エラー表示 */}
       {state.error && (
-        <div style={{
-          marginTop: '20px',
-          padding: '10px',
-          backgroundColor: '#fdf2f2',
-          border: '1px solid #d9534f',
-          borderRadius: '4px',
-          color: '#d9534f'
-        }}>
+        <div
+          style={{
+            marginTop: '20px',
+            padding: '10px',
+            backgroundColor: '#fdf2f2',
+            border: '1px solid #d9534f',
+            borderRadius: '4px',
+            color: '#d9534f',
+          }}
+        >
           エラー: {state.error}
         </div>
       )}
 
       {/* 成功時の表示 */}
       {state.success && state.data && (
-        <div style={{
-          marginTop: '20px',
-          padding: '15px',
-          backgroundColor: '#d4edda',
-          border: '1px solid #c3e6cb',
-          borderRadius: '4px',
-          color: '#155724'
-        }}>
+        <div
+          style={{
+            marginTop: '20px',
+            padding: '15px',
+            backgroundColor: '#d4edda',
+            border: '1px solid #c3e6cb',
+            borderRadius: '4px',
+            color: '#155724',
+          }}
+        >
           <h3 style={{ margin: '0 0 10px 0' }}>送信完了</h3>
-          <p><strong>名前:</strong> {state.data.name}</p>
-          <p><strong>メール:</strong> {state.data.email}</p>
-          <p><strong>メッセージ:</strong> {state.data.message}</p>
-          <p><strong>送信日時:</strong> {state.data.submittedAt}</p>
+          <p>
+            <strong>名前:</strong> {state.data.name}
+          </p>
+          <p>
+            <strong>メール:</strong> {state.data.email}
+          </p>
+          <p>
+            <strong>メッセージ:</strong> {state.data.message}
+          </p>
+          <p>
+            <strong>送信日時:</strong> {state.data.submittedAt}
+          </p>
         </div>
       )}
 
