@@ -19,6 +19,18 @@ const TopPage: React.FC = () => {
               useTransition
             </Link>
           </li>
+          <li style={{ marginBottom: '10px' }}>
+            <Link
+              to="/use-action-state"
+              style={{
+                textDecoration: 'none',
+                color: '#007bff',
+                fontSize: '18px',
+              }}
+            >
+              useActionState
+            </Link>
+          </li>
         </ul>
       </div>
     </div>
