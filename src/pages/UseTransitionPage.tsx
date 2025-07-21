@@ -21,8 +21,8 @@ const UseTransitionPage: React.FC = () => {
       <h1>useTransition</h1>
 
       <div style={{ marginTop: '20px' }}>
-        <WithUseTransitionDemo />
         <WithoutUseTransitionDemo />
+        <WithUseTransitionDemo />
         <UseTransitionPromiseDemo />
       </div>
     </div>

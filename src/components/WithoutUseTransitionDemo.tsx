@@ -1,79 +1,103 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-// 重い処理をシミュレートする関数
-const generateItems = (count: number) => {
-  console.log('generateItems', count);
-  const items = [];
-  for (let i = 0; i < count; i++) {
-    items.push(`アイテム ${i + 1}`);
-  }
-  return items;
+type Task = {
+  id: number;
+  title: string;
+  assignee: string;
 };
 
-const WithoutUseTransitionDemo: React.FC = () => {
-  const [input, setInput] = useState('');
-  const [items, setItems] = useState<string[]>([]);
+const tabs = {
+  a: 'A',
+  b: 'B',
+  c: 'C',
+};
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setInput(value);
+const tasks = generateTasks();
 
-    const count = parseInt(value) || 0;
-    setItems(generateItems(count));
+const filteringTab = (tab: string) => {
+  return tasks.filter((task) => task.assignee === tab);
+};
+
+const WithoutUseTransitionDemo = () => {
+  const [activeTab, setActiveTab] = useState(tabs.a);
+  const [taskList, setTaskList] = useState(tasks);
+
+  const onClickTab = (tab: string) => {
+    setActiveTab(tab);
+    // useTransitionを使わずに同期的に重い処理を実行
+    const filteredTasks = filteringTab(tab);
+    setTaskList(filteredTasks);
   };
 
-  console.log('render');
-
   return (
-    <div
-      style={{
-        marginTop: '40px',
-        borderTop: '2px solid #ddd',
-        paddingTop: '20px',
-      }}
-    >
-      <h2 style={{ color: '#d9534f' }}>比較: useTransitionを使わない場合</h2>
+    <div>
+      <h2 style={{ color: '#d9534f' }}>
+        useTransitionを使わないタブ切り替えデモ
+      </h2>
       <p style={{ color: '#d9534f' }}>
-        同じ処理をuseTransitionを使わずに実行します。
-        大きな数値を入力すると、入力フィールドがブロックされることを確認できます。
+        タブをクリックすると重いフィルタリング処理が実行されます。
+        useTransitionを使わないため、コンテンツ処理中はUIがブロックされます。
       </p>
 
-      <div style={{ marginBottom: '20px' }}>
-        <label>
-          アイテム数を入力（useTransition無し）:
-          <input
-            type="number"
-            value={input}
-            onChange={handleInputChange}
-            style={{
-              marginLeft: '10px',
-              padding: '5px',
-              border: '1px solid #d9534f',
-              borderRadius: '4px',
-            }}
-            placeholder="例: 1000"
-          />
-        </label>
-      </div>
-
+      {/* タブヘッダー */}
       <div
         style={{
-          maxHeight: '300px',
-          overflowY: 'auto',
-          border: '1px solid #d9534f',
-          padding: '10px',
-          backgroundColor: '#fdf2f2',
+          display: 'flex',
+          borderBottom: '2px solid #d9534f',
+          marginBottom: '20px',
         }}
       >
-        {items.length > 0 ? (
-          items.map((item, index) => (
-            <div key={index} style={{ padding: '2px 0' }}>
-              {item}
-            </div>
-          ))
+        {Object.entries(tabs).map(([key, value]) => (
+          <Tab
+            key={key}
+            tab={value}
+            onClick={onClickTab}
+            activeTab={activeTab}
+          />
+        ))}
+      </div>
+
+      {/* タブコンテンツ */}
+      <div
+        style={{
+          minHeight: '300px',
+          maxHeight: '400px',
+          overflowY: 'auto',
+          border: '1px solid #d9534f',
+          padding: '20px',
+          backgroundColor: '#fdf2f2',
+          borderRadius: '4px',
+        }}
+      >
+        {taskList.length > 0 ? (
+          <div>
+            <h3 style={{ marginTop: 0, color: '#d9534f' }}>
+              担当者 {activeTab} のタスク ({taskList.length}件)
+            </h3>
+            {taskList.map((task) => (
+              <div
+                key={task.id}
+                style={{
+                  padding: '8px 0',
+                  borderBottom: '1px solid #eee',
+                  fontSize: '14px',
+                }}
+              >
+                <div style={{ fontWeight: 'bold' }}>タイトル: {task.title}</div>
+                <div style={{ color: '#666' }}>担当者: {task.assignee}</div>
+              </div>
+            ))}
+          </div>
         ) : (
-          <div style={{ color: '#888' }}>
-            上の入力欄に数字を入力してください
+          <div
+            style={{
+              color: '#888',
+              textAlign: 'center',
+              padding: '40px',
+              fontSize: '16px',
+            }}
+          >
+            タスクがありません
           </div>
         )}
       </div>
@@ -81,12 +105,60 @@ const WithoutUseTransitionDemo: React.FC = () => {
       <div style={{ marginTop: '20px', fontSize: '14px', color: '#d9534f' }}>
         <strong>useTransitionを使わない場合の問題:</strong>
         <ul>
-          <li>大きな数値を入力すると入力フィールドがブロックされる</li>
-          <li>連続して入力した場合、UIが応答しなくなる</li>
+          <li>フィルタリング処理中はUI全体がフリーズする</li>
+          <li>他のタブをクリックできない</li>
+          <li>ユーザーは処理が終わるまで待つ必要がある</li>
           <li>ユーザーエクスペリエンスが悪化する</li>
         </ul>
       </div>
     </div>
+  );
+};
+
+function generateTasks(): Task[] {
+  return Array(10000)
+    .fill('')
+    .map((_, i) => {
+      const addedIndex = i + 1;
+      return {
+        id: addedIndex,
+        title: `Task ${addedIndex}`,
+        assignee:
+          addedIndex % 3 === 0
+            ? tabs.a
+            : addedIndex % 2 === 0
+              ? tabs.b
+              : tabs.c,
+      };
+    });
+}
+
+const Tab = ({
+  tab,
+  onClick,
+  activeTab,
+}: {
+  tab: string;
+  onClick: (tab: string) => void;
+  activeTab: string;
+}) => {
+  return (
+    <button
+      onClick={() => onClick(tab)}
+      style={{
+        padding: '12px 24px',
+        border: 'none',
+        borderBottom:
+          activeTab === tab ? '3px solid #d9534f' : '3px solid transparent',
+        backgroundColor: activeTab === tab ? '#fdf2f2' : 'transparent',
+        color: activeTab === tab ? '#d9534f' : '#666',
+        fontWeight: activeTab === tab ? 'bold' : 'normal',
+        cursor: 'pointer',
+        transition: 'all 0.2s ease',
+      }}
+    >
+      担当者 {tab}
+    </button>
   );
 };
 
