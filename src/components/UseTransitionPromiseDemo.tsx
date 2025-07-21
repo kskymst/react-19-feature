@@ -1,19 +1,24 @@
 import React, { useState, useTransition } from 'react';
 
 // APIコールをシミュレートするPromise関数
-const fetchUserData = (userId: number): Promise<{ id: number; name: string; email: string }> => {
+const fetchUserData = (
+  userId: number
+): Promise<{ id: number; name: string; email: string }> => {
   return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (userId === 999) {
-        reject(new Error('ユーザーが見つかりません'));
-      } else {
-        resolve({
-          id: userId,
-          name: `ユーザー ${userId}`,
-          email: `user${userId}@example.com`
-        });
-      }
-    }, 1000 + Math.random() * 2000); // 1-3秒のランダムな遅延
+    setTimeout(
+      () => {
+        if (userId === 999) {
+          reject(new Error('ユーザーが見つかりません'));
+        } else {
+          resolve({
+            id: userId,
+            name: `ユーザー ${userId}`,
+            email: `user${userId}@example.com`,
+          });
+        }
+      },
+      1000 + Math.random() * 2000
+    ); // 1-3秒のランダムな遅延
   });
 };
 
@@ -45,36 +50,41 @@ const UseTransitionPromiseDemo: React.FC = () => {
         const data = await fetchUserData(id);
         setUserData(data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : '不明なエラーが発生しました');
+        setError(
+          err instanceof Error ? err.message : '不明なエラーが発生しました'
+        );
       }
     });
   };
 
   return (
-    <div style={{ 
-      marginTop: '40px', 
-      borderTop: '2px solid #007bff', 
-      paddingTop: '20px' 
-    }}>
+    <div
+      style={{
+        marginTop: '40px',
+        borderTop: '2px solid #007bff',
+        paddingTop: '20px',
+      }}
+    >
       <h2 style={{ color: '#007bff' }}>useTransition + Promise パターン</h2>
       <p>
+        v19からstartTransitionが非同期処理をサポート
         useTransitionとPromiseを組み合わせて、非同期API呼び出しを実行します。
         UIは常にレスポンシブで、ローディング状態も適切に管理されます。
       </p>
-      
+
       <div style={{ marginBottom: '20px' }}>
         <label>
-          ユーザーID: 
+          ユーザーID:
           <input
             type="number"
             value={userId}
             onChange={(e) => setUserId(e.target.value)}
-            style={{ 
-              marginLeft: '10px', 
-              padding: '5px', 
+            style={{
+              marginLeft: '10px',
+              padding: '5px',
               border: '1px solid #007bff',
               borderRadius: '4px',
-              marginRight: '10px'
+              marginRight: '10px',
             }}
             placeholder="1-998 (999はエラー)"
           />
@@ -88,7 +98,7 @@ const UseTransitionPromiseDemo: React.FC = () => {
             color: 'white',
             border: 'none',
             borderRadius: '4px',
-            cursor: isPending ? 'not-allowed' : 'pointer'
+            cursor: isPending ? 'not-allowed' : 'pointer',
           }}
         >
           {isPending ? '取得中...' : 'ユーザー取得'}
@@ -96,40 +106,54 @@ const UseTransitionPromiseDemo: React.FC = () => {
       </div>
 
       {isPending && (
-        <div style={{ 
-          color: '#007bff', 
-          fontStyle: 'italic',
-          marginBottom: '20px'
-        }}>
+        <div
+          style={{
+            color: '#007bff',
+            fontStyle: 'italic',
+            marginBottom: '20px',
+          }}
+        >
           ユーザーデータを取得中... (バックグラウンドで実行中)
         </div>
       )}
 
       {error && (
-        <div style={{ 
-          color: '#d9534f', 
-          backgroundColor: '#fdf2f2',
-          padding: '10px',
-          border: '1px solid #d9534f',
-          borderRadius: '4px',
-          marginBottom: '20px'
-        }}>
+        <div
+          style={{
+            color: '#d9534f',
+            backgroundColor: '#fdf2f2',
+            padding: '10px',
+            border: '1px solid #d9534f',
+            borderRadius: '4px',
+            marginBottom: '20px',
+          }}
+        >
           エラー: {error}
         </div>
       )}
 
       {userData && (
-        <div style={{ 
-          backgroundColor: '#d4edda',
-          padding: '15px',
-          border: '1px solid #c3e6cb',
-          borderRadius: '4px',
-          marginBottom: '20px'
-        }}>
-          <h3 style={{ margin: '0 0 10px 0', color: '#155724' }}>ユーザー情報</h3>
-          <p><strong>ID:</strong> {userData.id}</p>
-          <p><strong>名前:</strong> {userData.name}</p>
-          <p><strong>メール:</strong> {userData.email}</p>
+        <div
+          style={{
+            backgroundColor: '#d4edda',
+            padding: '15px',
+            border: '1px solid #c3e6cb',
+            borderRadius: '4px',
+            marginBottom: '20px',
+          }}
+        >
+          <h3 style={{ margin: '0 0 10px 0', color: '#155724' }}>
+            ユーザー情報
+          </h3>
+          <p>
+            <strong>ID:</strong> {userData.id}
+          </p>
+          <p>
+            <strong>名前:</strong> {userData.name}
+          </p>
+          <p>
+            <strong>メール:</strong> {userData.email}
+          </p>
         </div>
       )}
 

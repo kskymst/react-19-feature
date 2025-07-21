@@ -35,6 +35,8 @@ const WithoutUseTransitionDemo = () => {
         useTransitionを使わないタブ切り替えデモ
       </h2>
       <p style={{ color: '#d9534f' }}>
+        React v18で追加されたuseTransitionのおさらい
+        <br />
         タブをクリックすると重いフィルタリング処理が実行されます。
         useTransitionを使わないため、コンテンツ処理中はUIがブロックされます。
       </p>
