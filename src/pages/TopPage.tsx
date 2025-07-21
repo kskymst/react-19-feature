@@ -55,6 +55,18 @@ const TopPage: React.FC = () => {
               useOptimistic
             </Link>
           </li>
+          <li style={{ marginBottom: '10px' }}>
+            <Link
+              to="/use"
+              style={{
+                textDecoration: 'none',
+                color: '#007bff',
+                fontSize: '18px',
+              }}
+            >
+              use
+            </Link>
+          </li>
         </ul>
       </div>
     </div>

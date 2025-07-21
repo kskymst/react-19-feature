@@ -6,6 +6,7 @@ import UseTransitionPage from './pages/UseTransitionPage';
 import UseActionStatePage from './pages/UseActionStatePage';
 import UseFormStatusPage from './pages/UseFormStatusPage';
 import UseOptimisticPage from './pages/UseOptimisticPage';
+import UsePage from './pages/UsePage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/use-action-state" element={<UseActionStatePage />} />
             <Route path="/use-form-status" element={<UseFormStatusPage />} />
             <Route path="/use-optimistic" element={<UseOptimisticPage />} />
+            <Route path="/use" element={<UsePage />} />
           </Routes>
         </main>
       </div>
