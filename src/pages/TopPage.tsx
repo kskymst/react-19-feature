@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const TopPage: React.FC = () => {
   return (
     <div>
-      <h1>トップページ</h1>
+      <h1>React v19 New Features</h1>
       <div style={{ marginTop: '20px' }}>
         <ul style={{ listStyle: 'none', padding: 0 }}>
           <li style={{ marginBottom: '10px' }}>
